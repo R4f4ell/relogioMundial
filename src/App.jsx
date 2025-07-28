@@ -12,6 +12,7 @@ function App() {
         if (Array.isArray(data)) setFusosDisponiveis(data);
         else throw new Error();
       })
+      // Fallback de fusos horários caso a API falhe
       .catch(() => {
         setFusosDisponiveis([
           "UTC",
@@ -31,6 +32,7 @@ function App() {
       });
   }, []);
 
+  // Detecta o fuso horário local do navegador e adiciona ao início
   useEffect(() => {
     const local = Intl.DateTimeFormat().resolvedOptions().timeZone;
     setFusosSelecionados([local]);
@@ -62,7 +64,7 @@ function App() {
           ))}
         </select>
 
-        <div className="clocks-container">
+        <div className="clocks-container" aria-live="polite">
           {fusosSelecionados.map((fuso) => (
             <TimeZoneClock
               key={fuso}

@@ -1,5 +1,7 @@
 @use './variables' as vars;
 
+// Estilos globais aplicados ao 'body' e tipografia base
+
 body {
   font-family: vars.$font-base;
   background-color: vars.$primary-color;
