@@ -1,0 +1,218 @@
+@use './variables' as vars;
+@use './reset';
+@use './global';
+@use './fonts';
+
+// Container principal da aplicação
+.app-container {
+  max-width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: vars.$text-color;
+    
+    @media (min-width: vars.$breakpoint-sm){
+      font-size: 1.5rem;
+    }    
+    @media (min-width: vars.$breakpoint-md){
+      font-size: 1.8rem;
+    }
+  }
+
+  select {
+    display: block;
+    margin: 0 auto 1.5rem auto;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: vars.$secondary-color;
+    color: vars.$primary-color;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+
+    @media (min-width: vars.$breakpoint-sm){
+      font-size: 17px;
+      padding: 0.5rem;
+    }    
+    @media (min-width: vars.$breakpoint-md){
+      font-size: 18px;  
+    }
+    @media (min-width: vars.$breakpoint-lg){
+      font-size: 20px;
+    }
+  }
+}
+
+// Container dos relógios
+.clocks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: vars.$breakpoint-sm){
+    width: 300px;
+  }
+
+  @media (min-width: vars.$breakpoint-md) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    min-width: 500px;
+  }
+
+  @media (min-width: vars.$breakpoint-lg){
+    width: 700px;
+  }
+}
+
+// Card do relógio
+.clock-card {
+  background: vars.$secondary-color;
+  border-radius: 12px;
+  padding: 1rem;
+  color: vars.$primary-color;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  width: 100%;
+
+  @media (min-width: vars.$breakpoint-md) {
+    height: 280px; // altura fixa para layout consistente no desktop
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__location {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    word-break: break-word;
+  }
+
+  &__city {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  &__remove {
+    background: vars.$danger-color;
+    color: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.5rem;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover,
+    &:focus {
+      background-color: darken(vars.$danger-color, 10%);
+      outline: none;
+    }
+  }
+
+  &__time-display {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    .clock-card__time {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .clock-card__date {
+      font-size: 1rem;
+      color: vars.$accent-color;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+// Relógio analógico estilizado em CSS
+.clock-analog {
+  width: 100px;
+  height: 100px;
+  border: 4px solid vars.$primary-color;
+  border-radius: 50%;
+  position: relative;
+  background: #fff;
+  margin: 0 auto;
+
+  &__face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__center {
+    width: 12px;
+    height: 12px;
+    background: vars.$danger-color;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+
+  &__hour-mark {
+    width: 2px;
+    height: 8px;
+    background: vars.$primary-color;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform-origin: bottom center;
+    border-radius: 2px;
+  }
+
+  &__hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    background: vars.$primary-color;
+    border-radius: 3px;
+
+    &--hour {
+      width: 6px;
+      height: 30px;
+      z-index: 5;
+    }
+
+    &--minute {
+      width: 4px;
+      height: 44px;
+      z-index: 4;
+    }
+
+    &--second {
+      width: 2px;
+      height: 44px;
+      background: vars.$danger-color;
+      z-index: 6;
+    }
+  }
+}

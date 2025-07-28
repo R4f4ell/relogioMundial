@@ -1,0 +1,10 @@
+@use './variables' as vars;
+
+body {
+  font-family: vars.$font-base;
+  background-color: vars.$primary-color;
+  color: vars.$text-color;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding: 1rem;
+}

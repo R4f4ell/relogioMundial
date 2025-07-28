@@ -1,51 +1,79 @@
 import React, { useState, useEffect } from "react";
 import TimeZoneClock from "./components/TimeZoneClock";
 
-const fusosHorarios = [
-  "UTC",
-  "GMT",
-  "America/New_York",
-  "America/Chicago",
-  "America/Denver",
-  "America/Los_Angeles",
-  "Europe/London",
-  "Europe/Berlin",
-  "Asia/Tokyo",
-];
-
 function App() {
-  const fusoHorarioLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const [fusosHorariosSelecionados, setFusosHorariosSelecionados] = useState([
-    fusoHorarioLocal,
-  ]);
+  const [fusosDisponiveis, setFusosDisponiveis] = useState([]);
+  const [fusosSelecionados, setFusosSelecionados] = useState([]);
 
-  const adicionarFusoHorario = (e) => {
-    const novoFuso = e.target.value;
-    if (!fusosHorariosSelecionados.includes(novoFuso)) {
-      setFusosHorariosSelecionados([...fusosHorariosSelecionados, novoFuso]);
+  useEffect(() => {
+    fetch("https://worldtimeapi.org/api/timezone")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setFusosDisponiveis(data);
+        else throw new Error();
+      })
+      .catch(() => {
+        setFusosDisponiveis([
+          "UTC",
+          "GMT",
+          "America/New_York",
+          "America/Chicago",
+          "America/Denver",
+          "America/Los_Angeles",
+          "Europe/London",
+          "Europe/Berlin",
+          "Asia/Tokyo",
+          "Asia/Dubai",
+          "Australia/Sydney",
+          "America/Sao_Paulo",
+          "Africa/Johannesburg",
+        ]);
+      });
+  }, []);
+
+  useEffect(() => {
+    const local = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFusosSelecionados([local]);
+  }, []);
+
+  const adicionarFuso = (e) => {
+    const fuso = e.target.value;
+    if (fuso && !fusosSelecionados.includes(fuso)) {
+      setFusosSelecionados([...fusosSelecionados, fuso]);
     }
   };
 
-  return (
-    <div>
-      <h1>Relógio Mundial</h1>
-      <select onChange={adicionarFusoHorario}>
-        <option value="" disabled selected>
-          Selecione um fuso horário
-        </option>
-        {fusosHorarios.map((fuso) => (
-          <option key={fuso} value={fuso}>
-            {fuso}
-          </option>
-        ))}
-      </select>
+  const removerFuso = (fuso) => {
+    setFusosSelecionados((prev) => prev.filter((item) => item !== fuso));
+  };
 
-      <div>
-        {fusosHorariosSelecionados.map((fuso) => (
-          <TimeZoneClock key={fuso} timeZone={fuso} />
-        ))}
-      </div>
-    </div>
+  return (
+    <main>
+      <section className="app-container">
+        <h1>Relógio Mundial</h1>
+        <select defaultValue="" onChange={adicionarFuso} aria-label="Selecionar fuso horário">
+          <option value="" disabled>
+            Selecione um fuso horário
+          </option>
+          {fusosDisponiveis.map((fuso) => (
+            <option key={fuso} value={fuso}>
+              {fuso}
+            </option>
+          ))}
+        </select>
+
+        <div className="clocks-container">
+          {fusosSelecionados.map((fuso) => (
+            <TimeZoneClock
+              key={fuso}
+              timezone={fuso}
+              canRemove={fusosSelecionados.length > 1}
+              onRemove={() => removerFuso(fuso)}
+            />
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
 
